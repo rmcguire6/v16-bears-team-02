@@ -6,3 +6,5 @@ Add-project-description-here | Voyage-16 | https://chingu.io/ | Twitter: https:/
 Regina Mc Guire--Team Lead
 
 Tomás Cristian
+
+Roo - [@rdollent](https://github.com/rdollent)
