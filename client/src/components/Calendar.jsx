@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 // need connect function to be able to connect to store from Provider
 import {connect} from 'react-redux';
 import { storeCurrentMonth, storeCurrentYear, storeCurrentDate } from '../actions/calendarActions';
@@ -18,6 +19,7 @@ class Calendar extends React.Component {
         this.nextMonth = this.nextMonth.bind(this);
         this.initFunctions = this.initFunctions.bind(this);
         this.passRefToWeek = this.passRefToWeek.bind(this);
+        this.getParentData = this.getParentData.bind(this);
         this.days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
         this.months = [
             'January', 'February', 'March', 'April',
@@ -26,6 +28,11 @@ class Calendar extends React.Component {
         ];
 
         // for use with week. create a reference for a single week then forward the ref to Week component for display.
+        // max possible # of weeks in any given month is 6
+        for(let i = 1; i <= 6; i++) {
+            this[`week${i}ref`] = React.createRef();
+        }
+
         this.myRef = React.createRef();
         
     }
@@ -85,14 +92,14 @@ class Calendar extends React.Component {
         for (let i = 0; i <= tdCount; i++) {
             let elem = React.createElement('td', {key: `td-${i}`},'')
             if(i >= firstDay && i <= firstDay + lastDate - 1) {
-                elem = React.createElement('td', {key: `td-${i}`, onClick: this.getParentId},dateNumber)
+                elem = React.createElement('td', {key: `td-${i}`, onClick: this.getParentData},dateNumber)
                 dateNumber++;
             }
             week.push(elem)
         }
 
         for(let i = weekNumber; i <= weekCount; i++) {
-            let elem = React.createElement('tr', {id: `week-${i}`},
+            let elem = React.createElement('tr', {id: `week-${i}`, 'data-weeknumber': i, ref: this[`week${i}ref`]},
             week[dateCount],
             week[dateCount+1],
             week[dateCount+2],
@@ -239,16 +246,18 @@ class Calendar extends React.Component {
     }
 
     // pass ref property to tr (parent node of date)
-    getParentId(e) {
+    getParentData(e) {
         // e.currentTarget.parentNode.ref = this.myRef;
-        console.log(e.currentTarget.parentNode.ref);
-        const parentId = e.currentTarget.parentNode.id;
-        passRefToWeek(parentId);
+        // console.log(e.currentTarget.parentNode.ref);
+        const parentNode = e.currentTarget.parentNode.dataset.weeknumber;
+        // return parentId;
+        this.passRefToWeek(parentNode);
         
     }
 
-    passRefToWeek(id) {
-        ReactDOM.findDOMNode(id);
+    passRefToWeek(parentNode) {
+        // parentNode.setAttribute('ref', this.myRef);
+        console.log(this[`week${parentNode}ref`]);
     }
 
 
@@ -260,7 +269,7 @@ class Calendar extends React.Component {
                 <button id='next-month' onClick={this.nextMonth}>Next</button>
                 <table>
                     <thead>
-                        <tr>
+                        <tr ref={this.myRef}>
                             <th colSpan='7'>
                                 {this.months[this.props.currentMonth]} {this.props.currentYear}
                             </th>
@@ -304,6 +313,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-const Container = connect(mapStateToProps, mapDispatchToProps)(Calendar);
+
+// https://medium.com/@mehran.khan/using-refs-with-react-redux-6-how-to-use-refs-on-connected-components-4b80d4ea7300
+const Container = connect(mapStateToProps, mapDispatchToProps, null, {forwardRef:true})(Calendar);
 
 export default Container;

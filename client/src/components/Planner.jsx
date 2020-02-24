@@ -7,12 +7,17 @@ const {connect} = require('react-redux');
 class Planner extends React.Component {
     constructor(props) {
         super(props);
+        this.childRef = React.createRef();
+    }
+
+    componentDidMount() {
+        console.log("this is parentelem", this.childRef.current);
     }
 
     render() {
         return (
             <div>
-                <Calendar />
+                <Calendar ref={this.childRef}/>
                 <Week />
             </div>
 
