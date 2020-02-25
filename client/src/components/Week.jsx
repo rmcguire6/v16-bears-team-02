@@ -7,6 +7,9 @@ class Week extends React.Component {
 
     }
 
+    componentDidMount() {
+        console.log('week ref', this.props);
+    }
 
     render() {
         return (
@@ -17,4 +20,5 @@ class Week extends React.Component {
     }
 }
 
-export default withRouter(Week);
+// export default withRouter(Week);
+export default React.forwardRef((props,ref) => <Week {...props} ref={ref} />);
