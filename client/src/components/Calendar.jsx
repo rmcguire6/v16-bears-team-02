@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // need connect function to be able to connect to store from Provider
 import {connect} from 'react-redux';
-import { storeCurrentMonth, storeCurrentYear, storeCurrentDate } from '../actions/calendarActions';
+import { storeCurrentMonth, storeCurrentYear, storeCurrentDate, storeCurrentWeek } from '../actions/calendarActions';
 
 class Calendar extends React.Component {
     constructor(props) {
@@ -20,6 +20,7 @@ class Calendar extends React.Component {
         this.initFunctions = this.initFunctions.bind(this);
         this.passRefToWeek = this.passRefToWeek.bind(this);
         this.getParentData = this.getParentData.bind(this);
+        this.cloneThis = this.cloneThis.bind(this);
         this.days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
         this.months = [
             'January', 'February', 'March', 'April',
@@ -29,11 +30,11 @@ class Calendar extends React.Component {
 
         // for use with week. create a reference for a single week then forward the ref to Week component for display.
         // max possible # of weeks in any given month is 6
-        for(let i = 1; i <= 6; i++) {
-            this[`week${i}ref`] = React.createRef();
-        }
+        // for(let i = 1; i <= 6; i++) {
+        //     this[`week${i}ref`] = React.createRef();
+        // }
 
-        this.myRef = React.createRef();
+        // this.myRef = React.createRef();
         
     }
 
@@ -46,6 +47,7 @@ class Calendar extends React.Component {
             this.getNumberOfWeeks();
             this.populateDates();
             this.initFunctions();
+            this.cloneThis();
         }
     }
 
@@ -99,7 +101,9 @@ class Calendar extends React.Component {
         }
 
         for(let i = weekNumber; i <= weekCount; i++) {
-            let elem = React.createElement('tr', {id: `week-${i}`, 'data-weeknumber': i, ref: this[`week${i}ref`]},
+            let elem = React.createElement('tr', {id: `week-${i}`, 'data-weeknumber': i
+            // , ref: this[`week${i}ref`]
+        },
             week[dateCount],
             week[dateCount+1],
             week[dateCount+2],
@@ -149,6 +153,7 @@ class Calendar extends React.Component {
         }
         return date;
     }
+
 
     // last date of any given month is
     // 1st date of next month - 1
@@ -247,17 +252,32 @@ class Calendar extends React.Component {
 
     // pass ref property to tr (parent node of date)
     getParentData(e) {
-        // e.currentTarget.parentNode.ref = this.myRef;
-        // console.log(e.currentTarget.parentNode.ref);
-        const parentNode = e.currentTarget.parentNode.dataset.weeknumber;
+        const parentId = e.currentTarget.parentNode.id;
         // return parentId;
-        this.passRefToWeek(parentNode);
-        
+        // this.passRefToWeek(parentNode);    
+        // console.log(parentNode);
+        this.props.storeCurrentWeekToState(parentId);
     }
 
     passRefToWeek(parentNode) {
         // parentNode.setAttribute('ref', this.myRef);
-        console.log(this[`week${parentNode}ref`]);
+        // console.log(this[`week${parentNode}ref`]);
+    }
+
+    cloneThis() {
+        // let a = document.createElement('table');
+        // let c = document.getElementById('copy')
+        // c.appendChild((document.getElementById('week-1')).cloneNode(true));
+        // // a.innerHTML = b;
+        // let c = this.week1ref.current;
+        // console.log(a);
+
+        // a.push(this.week1ref.current);
+        // this.week1ref.current
+        // let y = React.createElement('div', null, a);
+        // let x = React.cloneElement(y);
+        // console.log('this is x', x);
+        // return c;
     }
 
 
@@ -267,16 +287,16 @@ class Calendar extends React.Component {
             <div>
                 <button id='prev-month' onClick={this.prevMonth}>Prev</button>
                 <button id='next-month' onClick={this.nextMonth}>Next</button>
-                <table>
+                <table id='calendar'>
                     <thead>
-                        <tr ref={this.myRef}>
+                        <tr>
                             <th colSpan='7'>
                                 {this.months[this.props.currentMonth]} {this.props.currentYear}
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr id='weekdays'>
                             {this.populateDays()}
                         </tr>
                         {this.populateDates()}
@@ -308,6 +328,10 @@ const mapDispatchToProps = (dispatch) => {
         storeCurrentDateToState: (date) => {
             console.log('storeCurrentDateToState');
             dispatch(storeCurrentDate(date));
+        },
+        storeCurrentWeekToState: (week) => {
+            console.log('storeCurrentWeekToState');
+            dispatch(storeCurrentWeek(week));
         }
     }
 };
@@ -315,6 +339,8 @@ const mapDispatchToProps = (dispatch) => {
 
 
 // https://medium.com/@mehran.khan/using-refs-with-react-redux-6-how-to-use-refs-on-connected-components-4b80d4ea7300
-const Container = connect(mapStateToProps, mapDispatchToProps, null, {forwardRef:true})(Calendar);
+// const Container = connect(mapStateToProps, mapDispatchToProps, null, {forwardRef:true})(Calendar);
+
+const Container = connect(mapStateToProps, mapDispatchToProps)(Calendar);
 
 export default Container;

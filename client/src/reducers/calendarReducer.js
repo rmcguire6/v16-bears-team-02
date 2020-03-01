@@ -1,9 +1,15 @@
-import { STORE_CURRENT_MONTH, STORE_CURRENT_YEAR, STORE_CURRENT_DATE } from '../actions/types';
+import { 
+  STORE_CURRENT_MONTH, 
+  STORE_CURRENT_YEAR, 
+  STORE_CURRENT_DATE, 
+  STORE_CURRENT_WEEK 
+} from '../actions/types';
 
 const initialState = {
     currentMonth: null,
     currentYear: null,
-    currentDate: null
+    currentDate: null,
+    currentWeek: null
 };
 
 // Actions are dispatched to this reducer...
@@ -19,12 +25,16 @@ const calendarReducer = (state = initialState, action) => {
           ...state,
           currentYear: action.payload
         };
-      case STORE_CURRENT_DATE: {
+      case STORE_CURRENT_DATE: 
         return {
           ...state,
           currentDate: action.payload
-        }
-      }
+        };
+      case STORE_CURRENT_WEEK: 
+        return {
+          ...state,
+          currentWeek: action.payload
+      };
       default:
         return state;
     }
