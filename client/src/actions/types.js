@@ -1,1 +1,5 @@
 // action types go here
+export const STORE_CURRENT_MONTH = 'STORE_CURRENT_MONTH';
+export const STORE_CURRENT_YEAR = 'STORE_CURRENT_YEAR';
+export const STORE_CURRENT_DATE = 'STORE_CURRENT_DATE';
+export const STORE_CURRENT_WEEK = 'STORE_CURRENT_WEEK';
