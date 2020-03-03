@@ -4,15 +4,18 @@ import ReactDOM from 'react-dom';
 import {connect} from 'react-redux';
 import { storeCurrentMonth, storeCurrentYear, storeCurrentDate, storeCurrentWeek } from '../actions/calendarActions';
 
+import { getCurrentMonth, getCurrentYear, getCurrentDate, getFirstDay, getLastFullDate, getNumberOfWeeks } from './Functions';
+
+
 class Calendar extends React.Component {
     constructor(props) {
         super(props);
-        this.getCurrentMonth = this.getCurrentMonth.bind(this);
-        this.getCurrentYear = this.getCurrentYear.bind(this);
-        this.getCurrentDate = this.getCurrentDate.bind(this);
-        this.getFirstDay = this.getFirstDay.bind(this);
-        this.getLastFullDate = this.getLastFullDate.bind(this);
-        this.getNumberOfWeeks = this.getNumberOfWeeks.bind(this);
+        this.getCurrentMonth = getCurrentMonth.bind(this);
+        this.getCurrentYear = getCurrentYear.bind(this);
+        this.getCurrentDate = getCurrentDate.bind(this);
+        this.getFirstDay = getFirstDay.bind(this);
+        this.getLastFullDate = getLastFullDate.bind(this);
+        this.getNumberOfWeeks = getNumberOfWeeks.bind(this);
         this.populateDates = this.populateDates.bind(this);
         this.populateDays = this.populateDays.bind(this);
         this.prevMonth = this.prevMonth.bind(this);
@@ -118,91 +121,91 @@ class Calendar extends React.Component {
         return allWeeks;
     }
 
-    getCurrentMonth() {
-        console.log('getCurrentMonth');
-        let month;
-        if(this.props.currentMonth !== null) {
-            month = this.props.currentMonth;
-        } else {
-            month = (new Date()).getMonth();
-            this.props.storeCurrentMonthToState(month);
-        }
-        return month;
-    }
+    // getCurrentMonth() {
+    //     console.log('getCurrentMonth');
+    //     let month;
+    //     if(this.props.currentMonth !== null) {
+    //         month = this.props.currentMonth;
+    //     } else {
+    //         month = (new Date()).getMonth();
+    //         this.props.storeCurrentMonthToState(month);
+    //     }
+    //     return month;
+    // }
 
-    getCurrentYear() {
-        console.log('getCurrentYear');
-        let year;
-        if(this.props.currentYear !== null) {
-            year = this.props.currentYear;
-        } else {
-            year = (new Date()).getFullYear();
-            this.props.storeCurrentYearToState(year);
-        }
-        return year;
-    }
+    // getCurrentYear() {
+    //     console.log('getCurrentYear');
+    //     let year;
+    //     if(this.props.currentYear !== null) {
+    //         year = this.props.currentYear;
+    //     } else {
+    //         year = (new Date()).getFullYear();
+    //         this.props.storeCurrentYearToState(year);
+    //     }
+    //     return year;
+    // }
 
-    getCurrentDate() {
-        console.log('getCurrentDate');
-        let date;
-        if(this.props.currentDate !== null) {
-            date = this.props.currentDate;
-        } else {
-            date = (new Date()).getDate();
-            this.props.storeCurrentDateToState(date);
-        }
-        return date;
-    }
-
-
-    // last date of any given month is
-    // 1st date of next month - 1
-    // need current year
-    getLastFullDate() {
-        console.log('getLastFullDate');
-        let currentMonth = this.props.currentMonth || this.getCurrentMonth();
-        let currentYear = currentMonth === 11 ? // if december, make it new year
-            (this.props.currentYear  || this.getCurrentYear()) + 1 
-            : (this.props.currentYear  || this.getCurrentYear());
-        let nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
-        // add 1 to nextMonth to get exact month
-        // because months array is zero-based
-        // thus, 0 is january but 1/1 is january 1st in date format
-        let nextMonthFullDate = (new Date(`${nextMonth + 1}/1/${currentYear}`));
-        let lastFullDate =  (new Date(nextMonthFullDate.setDate(0)));
-        return lastFullDate;
-    }
-
-    // get first day of the month
-    getFirstDay() {
-        console.log('getFirstDay');
-        let month = this.getCurrentMonth() + 1;
-        let currentYear = this.getCurrentYear();
-        let firstDate = (new Date(`${month}/1/${currentYear}`));
-        let firstDay = firstDate.getDay();
-        return firstDay;
-    }
+    // getCurrentDate() {
+    //     console.log('getCurrentDate');
+    //     let date;
+    //     if(this.props.currentDate !== null) {
+    //         date = this.props.currentDate;
+    //     } else {
+    //         date = (new Date()).getDate();
+    //         this.props.storeCurrentDateToState(date);
+    //     }
+    //     return date;
+    // }
 
 
-    //get # of weeks
-    // count 2 weeks straight off-the-bat. 1st week where first date of month is.
-    // 2nd week is where last date of month is.
-    // take first date of the last week, subtract 1 to get the last date of the week before
-    // i.e. if 27 is first date of last week, then the 26th is the last date of the week before
-    // after getting that date, look for the last date of the first week
-    // then subtract that from the last date of 2nd-to-the-last week
-    getNumberOfWeeks() {
-        console.log('getNumberOfWeeks');
-        let weekCount = 2;
-        let lastFullDate = this.getLastFullDate();
-        let lastDate = lastFullDate.getDate();
-        let lastDay = lastFullDate.getDay();
-        let a = lastDate - lastDay;
-        let firstDay = this.getFirstDay();
-        let b = 1 + (6 - firstDay);
-        weekCount += (a - b - 1)/7
-        return weekCount;
-    }
+    // // last date of any given month is
+    // // 1st date of next month - 1
+    // // need current year
+    // getLastFullDate() {
+    //     console.log('getLastFullDate');
+    //     let currentMonth = this.props.currentMonth || this.getCurrentMonth();
+    //     let currentYear = currentMonth === 11 ? // if december, make it new year
+    //         (this.props.currentYear  || this.getCurrentYear()) + 1 
+    //         : (this.props.currentYear  || this.getCurrentYear());
+    //     let nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+    //     // add 1 to nextMonth to get exact month
+    //     // because months array is zero-based
+    //     // thus, 0 is january but 1/1 is january 1st in date format
+    //     let nextMonthFullDate = (new Date(`${nextMonth + 1}/1/${currentYear}`));
+    //     let lastFullDate =  (new Date(nextMonthFullDate.setDate(0)));
+    //     return lastFullDate;
+    // }
+
+    // // get first day of the month
+    // getFirstDay() {
+    //     console.log('getFirstDay');
+    //     let month = this.getCurrentMonth() + 1;
+    //     let currentYear = this.getCurrentYear();
+    //     let firstDate = (new Date(`${month}/1/${currentYear}`));
+    //     let firstDay = firstDate.getDay();
+    //     return firstDay;
+    // }
+
+
+    // //get # of weeks
+    // // count 2 weeks straight off-the-bat. 1st week where first date of month is.
+    // // 2nd week is where last date of month is.
+    // // take first date of the last week, subtract 1 to get the last date of the week before
+    // // i.e. if 27 is first date of last week, then the 26th is the last date of the week before
+    // // after getting that date, look for the last date of the first week
+    // // then subtract that from the last date of 2nd-to-the-last week
+    // getNumberOfWeeks() {
+    //     console.log('getNumberOfWeeks');
+    //     let weekCount = 2;
+    //     let lastFullDate = this.getLastFullDate();
+    //     let lastDate = lastFullDate.getDate();
+    //     let lastDay = lastFullDate.getDay();
+    //     let a = lastDate - lastDay;
+    //     let firstDay = this.getFirstDay();
+    //     let b = 1 + (6 - firstDay);
+    //     weekCount += (a - b - 1)/7
+    //     return weekCount;
+    // }
 
     //next month and previous month
     prevMonth() {
