@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { getLastFullDate, getNumberOfWeeks, getFirstDay } from './Functions';
 
 class Week extends React.Component {
     constructor(props) {
@@ -12,8 +13,8 @@ class Week extends React.Component {
     componentDidMount() {
         //    this.cloneThis();
             console.log('week props', this.props.currentWeek);
-            let id = this.props.currentWeek;
-            this.cloneThis();
+            this.week = getCurrentWeek();
+            this.cloneThis(this.week);
             // if(this.props.currentWeek === null) {
             //     this.getCurrentWeek();
             // }
@@ -21,18 +22,37 @@ class Week extends React.Component {
     }
 
     getCurrentWeek() {
-        // console.log('getCurrentWeek');
-        // let week;
-        //     console.log(Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate()));
-        //     // week = (Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate())).parentNode.id;
-        //     week = 'week-2';
-        //     this.props.storeCurrentWeekToState('week-2');
-        // }
-        // return week;
+        console.log('getCurrentWeek');
+        let saturdays = [];
+        const lastDate = (getLastFullDate()).getDate();
+        const date = (new Date()).getDate();
+        const day = (new Date()).getDay();
+        // get first saturday
+        let sat1 = date + (6 - day);
+        
+
+        
+
     }
 
-    cloneThis() {
+    getWeekElem() {
+        console.log('getWeekElem');
+        let week;
+        if(this.props.currentWeek === null) {
+            
+        } else {
+            console.log(Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate()));
+            week = (Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate())).parentNode.id;
+            week = 'week-2';
+            this.props.storeCurrentWeekToState('week-2');
+        }
 
+        // this.props.storeCurrentWeekToState(week);
+        // return week;
+        
+    }
+
+    cloneThis(week) {
             let c = document.getElementById('copy');
             c.appendChild((document.getElementById('weekdays')).cloneNode(true));
             c.appendChild((document.getElementById('week-2')).cloneNode(true));

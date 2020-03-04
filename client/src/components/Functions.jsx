@@ -30,8 +30,8 @@ export const getCurrentDate = function() {
         date = this.props.currentDate;
     } else {
         date = (new Date()).getDate();
-        this.props.storeCurrentDateToState(date);
     }
+    this.props.storeCurrentDateToState(date);
     return date;
 }
 
