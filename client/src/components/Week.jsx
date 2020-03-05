@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getLastFullDate, getNumberOfWeeks, getFirstDay } from './Functions';
+import { getLastFullDate, getNumberOfWeeks, getFirstDay, getLastFullDate } from './Functions';
 
 class Week extends React.Component {
     constructor(props) {
@@ -23,12 +23,28 @@ class Week extends React.Component {
 
     getCurrentWeek() {
         console.log('getCurrentWeek');
+        let week;
         let saturdays = [];
         const lastDate = (getLastFullDate()).getDate();
-        const date = (new Date()).getDate();
+        const currentDate = (new Date()).getDate();
         const day = (new Date()).getDay();
+        const weekCount = getNumberOfWeeks();
+        let sat = 1;
         // get first saturday
-        let sat1 = date + (6 - day);
+        let firstOfDay = getFirstDay();
+        let lastDate = (getLastFullDate()).getDate();
+        let sat1 = 1 + (6 - firstOfMonthDay);
+        saturdays.push(sat1);
+        sat = sat1;
+        for(let i = 2; i <= weekCount; i++) {
+            sat+=7;
+            saturdays.push(sat);
+        }
+        saturdays.forEach( (elem) => {
+            
+        })
+        
+
         
 
         
