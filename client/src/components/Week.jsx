@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { storeCurrentMonth, storeCurrentYear, storeCurrentDate, storeCurrentWeek } from '../actions/calendarActions';
 import { getCurrentMonth, getCurrentYear, getCurrentDate, getFirstDay, getLastFullDate, getNumberOfWeeks, createWeek } from './Functions';
 
 class Week extends React.Component {
@@ -16,14 +17,15 @@ class Week extends React.Component {
         this.getLastFullDate = getLastFullDate.bind(this);
         this.getNumberOfWeeks = getNumberOfWeeks.bind(this);
 
+        this.getCurrentWeek = this.getCurrentWeek.bind(this);
         this.createWeek = createWeek.bind(this);
+        // this.week = '';
     }
 
     componentDidMount() {
         //    this.cloneThis();
             console.log('week props', this.props.currentWeek);
-            this.week = this.getCurrentWeek();
-            this.getCurrentWeek = this.getCurrentWeek.bind(this);
+            this.cloneThis(this.getWeekElem());
             // this.cloneThis(this.week);
             // if(this.props.currentWeek === null) {
             //     this.getCurrentWeek();
@@ -68,28 +70,29 @@ class Week extends React.Component {
     
     }
 
-    // getWeekElem() {
-    //     console.log('getWeekElem');
-    //     let week;
-    //     if(this.props.currentWeek === null) {
-        
-    //     } else {
-    //         console.log(Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate()));
-    //         week = (Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate())).parentNode.id;
-    //         week = 'week-2';
-    //         this.props.storeCurrentWeekToState('week-2');
-    //     }
+    getWeekElem() {
+        console.log('getWeekElem');
+        let week;
+        if(this.props.currentWeek === null) {
+            week = `week-${this.getCurrentWeek()}`;
+            this.props.storeCurrentWeekToState(week);
+        } else {
+            week = this.props.currentWeek;
+            // console.log(Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate()));
+            // week = (Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate())).parentNode.id;
+            // week = 'week-2';
+            // this.props.storeCurrentWeekToState('week-2');
+        }
 
-    //     // this.props.storeCurrentWeekToState(week);
-    //     // return week;
-    
-    // }
+        this.props.storeCurrentWeekToState(week);
+        return week;
+    }
 
-    // cloneThis(week) {
-    //         let c = document.getElementById('copy');
-    //         c.appendChild((document.getElementById('weekdays')).cloneNode(true));
-    //         c.appendChild((document.getElementById('week-2')).cloneNode(true));
-    // }
+    cloneThis(week) {
+            let c = document.getElementById('copy');
+            c.appendChild((document.getElementById('weekdays')).cloneNode(true));
+            c.appendChild((document.getElementById(week)).cloneNode(true));
+    }
 
     render() {
         return (
@@ -104,7 +107,7 @@ class Week extends React.Component {
                         </tr>
                     </thead>
                     <tbody id='copy'>
-                    {this.week}
+                    {/* {this.week} */}
                     </tbody>
                </table>
             </div>
@@ -119,17 +122,17 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    // return {
-    //     storeCurrentWeekToState: (week) => {
-    //         console.log('storeCurrentWeekToState');
-    //         dispatch(storeCurrentWeek(week));
-    //     }
-    // }
+    return {
+        storeCurrentWeekToState: (week) => {
+            console.log('storeCurrentWeekToState');
+            dispatch(storeCurrentWeek(week));
+        }
+    }
 };
 
 
 // export default withRouter(Week);
 // export default React.forwardRef((props,ref) => <Week {...props} ref={ref} />);
 
-const Container = connect(mapStateToProps)(Week);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Week);
 export default Container;
