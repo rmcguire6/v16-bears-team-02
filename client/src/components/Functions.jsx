@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const getCurrentMonth = function() {
     console.log('getCurrentMonth');
     let month;
@@ -122,6 +124,19 @@ export const createWeek = function() {
     console.log(allWeeks);
     return allWeeks;
 
+}
+
+
+export const populateDays = function() {
+    console.log('populateDays');
+    const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    let tabledays = [];
+    for(let i in days) {
+        tabledays.push(React.createElement('td', {key: `${days[i]}-${i}` }, days[i]));
+    }
+    return (
+        tabledays
+    );
 }
 
 
