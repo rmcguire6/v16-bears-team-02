@@ -43,7 +43,7 @@ class Week extends React.Component {
         let a = React.createElement('tr', {colSpan: '7'}, 
             React.createElement('td', {}, 'Times'),
             week.map((day, index) => {
-            return React.createElement('td', {className: `day-time-${index}`}, day)
+            return React.createElement('td', {className: `${this.props.currentMonth}-${day}`}, day)
         }));
         return a;
     }
@@ -51,7 +51,15 @@ class Week extends React.Component {
     populateTimes() {
         let format = ['AM', 'PM'];
         let times = [12,1,2,3,4,5,6,7,8,9,10,11];
-        
+        let week = this.getCurrentWeek();
+        let timeList = (format.map((meridiem) => { return times.map((hour) => { return `${hour} ${meridiem}`})})).flat();
+        let timeSlots = timeList.map((t) => {
+            let slot = React.createElement('td', {}, t);
+            return React.createElement('tr', {}, [slot, week.map((l) => React.createElement('td', {}, ''))]);
+        })
+        console.log('week is',week);
+        return timeSlots;
+
     }
 
     render() {
@@ -72,6 +80,7 @@ class Week extends React.Component {
                             {this.populateDays()}
                         </tr>
                         {this.populateWeek()}
+                        {this.populateTimes()}
                     </tbody>
                </table>
             </div>
