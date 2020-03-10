@@ -1,77 +1,57 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getLastFullDate, getNumberOfWeeks, getFirstDay, getLastFullDate } from './Functions';
+import { storeCurrentWeek } from '../actions/calendarActions';
+import { getCurrentMonth, getCurrentYear, getCurrentDate, getFirstDay, getLastFullDate, getNumberOfWeeks, createWeek, populateDays } from './Functions';
 
 class Week extends React.Component {
     constructor(props) {
         super(props);
-        this.cloneThis = this.cloneThis.bind(this);
+        // this.cloneThis = this.cloneThis.bind(this);
         this.getCurrentWeek = this.getCurrentWeek.bind(this);
+        this.getCurrentMonth = getCurrentMonth.bind(this);
+        this.getCurrentYear = getCurrentYear.bind(this);
+        this.getCurrentDate = getCurrentDate.bind(this);
+        this.getFirstDay = getFirstDay.bind(this);
+        this.getLastFullDate = getLastFullDate.bind(this);
+        this.getNumberOfWeeks = getNumberOfWeeks.bind(this);
+        this.createWeek = createWeek.bind(this);
+        this.populateDays = populateDays.bind(this);
+        this.populateWeek = this.populateWeek.bind(this);
     }
 
     componentDidMount() {
-        //    this.cloneThis();
-            console.log('week props', this.props.currentWeek);
-            this.week = getCurrentWeek();
-            this.cloneThis(this.week);
-            // if(this.props.currentWeek === null) {
-            //     this.getCurrentWeek();
-            // }
-            
+        this.populateWeek();
     }
 
     getCurrentWeek() {
         console.log('getCurrentWeek');
-        let week;
-        let saturdays = [];
-        const lastDate = (getLastFullDate()).getDate();
-        const currentDate = (new Date()).getDate();
-        const day = (new Date()).getDay();
-        const weekCount = getNumberOfWeeks();
-        let sat = 1;
-        // get first saturday
-        let firstOfDay = getFirstDay();
-        let lastDate = (getLastFullDate()).getDate();
-        let sat1 = 1 + (6 - firstOfMonthDay);
-        saturdays.push(sat1);
-        sat = sat1;
-        for(let i = 2; i <= weekCount; i++) {
-            sat+=7;
-            saturdays.push(sat);
-        }
-        saturdays.forEach( (elem) => {
-            
-        })
-        
+        const currentDate = this.props.currentDate || (new Date()).getDate();
+        const allWeeks = this.createWeek();
+        let week = allWeeks.find((arr) => {
+            return arr === (arr.find((d) => {
+                return d === currentDate
+            }) ? arr : 'error' )
 
-        
-
-        
+        });
+        return week;
 
     }
 
-    getWeekElem() {
-        console.log('getWeekElem');
-        let week;
-        if(this.props.currentWeek === null) {
-            
-        } else {
-            console.log(Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate()));
-            week = (Array.from(document.querySelectorAll('#calendar td')).find(el => el.textContent === this.getCurrentDate())).parentNode.id;
-            week = 'week-2';
-            this.props.storeCurrentWeekToState('week-2');
-        }
-
-        // this.props.storeCurrentWeekToState(week);
-        // return week;
-        
+    populateWeek() {
+        let week = this.getCurrentWeek();
+        let a = React.createElement('tr', {colSpan: '7'}, 
+            React.createElement('td', {}, 'Times'),
+            week.map((day, index) => {
+            return React.createElement('td', {className: `day-time-${index}`}, day)
+        }));
+        return a;
     }
 
-    cloneThis(week) {
-            let c = document.getElementById('copy');
-            c.appendChild((document.getElementById('weekdays')).cloneNode(true));
-            c.appendChild((document.getElementById('week-2')).cloneNode(true));
+    populateTimes() {
+        let format = ['AM', 'PM'];
+        let times = [12,1,2,3,4,5,6,7,8,9,10,11];
+        
     }
 
     render() {
@@ -86,6 +66,12 @@ class Week extends React.Component {
                         </tr>
                     </thead>
                     <tbody id='copy'>
+                        <tr colSpan='8'>
+                            <td>
+                            </td>
+                            {this.populateDays()}
+                        </tr>
+                        {this.populateWeek()}
                     </tbody>
                </table>
             </div>
@@ -100,17 +86,17 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    // return {
-    //     storeCurrentWeekToState: (week) => {
-    //         console.log('storeCurrentWeekToState');
-    //         dispatch(storeCurrentWeek(week));
-    //     }
-    // }
+    return {
+        storeCurrentWeekToState: (week) => {
+            console.log('storeCurrentWeekToState');
+            dispatch(storeCurrentWeek(week));
+        }
+    }
 };
 
 
 // export default withRouter(Week);
 // export default React.forwardRef((props,ref) => <Week {...props} ref={ref} />);
 
-const Container = connect(mapStateToProps)(Week);
+const Container = connect(mapStateToProps, mapDispatchToProps)(Week);
 export default Container;

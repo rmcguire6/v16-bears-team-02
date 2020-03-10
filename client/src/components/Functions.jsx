@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const getCurrentMonth = function() {
     console.log('getCurrentMonth');
     let month;
@@ -84,3 +86,107 @@ export const getNumberOfWeeks = function() {
     weekCount += (a - b - 1)/7
     return weekCount;
 }
+
+export const createWeek = function() {
+    console.log('createWeek');
+    let allWeeks = [];
+    let week = [];
+    let dateNumber = 1; // date counter
+    let weekNumber = 1; // first week
+    // const lastFullDate = (this.getLastFullDate()).getDate();
+    const lastDate = (this.getLastFullDate()).getDate();
+    const weekCount = this.getNumberOfWeeks();
+    const firstDay = this.getFirstDay();
+    const tdCount = weekCount * 7;
+    let dateCount = 0; //date counter
+    // create elements inside week. always will have 7 tds.
+    for (let i = 0; i <= tdCount; i++) {
+        let elem = ''
+        if(i >= firstDay && i <= firstDay + lastDate - 1) {
+            elem = dateNumber;
+            dateNumber++;
+        }
+        week.push(elem)
+    }
+
+    for(let i = weekNumber; i <= weekCount; i++) {
+        let elem = [week[dateCount],
+        week[dateCount+1],
+        week[dateCount+2],
+        week[dateCount+3],
+        week[dateCount+4],
+        week[dateCount+5],
+        week[dateCount+6],
+        ]
+        allWeeks.push(elem);
+        dateCount+=7;
+    }
+    console.log(allWeeks);
+    return allWeeks;
+
+}
+
+
+export const populateDays = function() {
+    console.log('populateDays');
+    const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    let tabledays = [];
+    for(let i in days) {
+        tabledays.push(React.createElement('td', {key: `${days[i]}-${i}` }, days[i]));
+    }
+    return (
+        tabledays
+    );
+}
+
+
+
+
+ // use react.createelement to dynamically add elements in page
+    // need to use this for # of weeks / tr
+    // {React.createElement('th', {}, 'created element')}
+    // make nested array with the weeks in it
+    // [[week1],[week2], [week3], [week4]]
+    // where week1 = ['','','','1','2','3','4']
+    // when 1st of the month falls on a wednesday
+    // [tr,tr,tr,tr]
+    // tr = [td,td,td,td,td,td,td]
+    // populateDates() {
+    //     console.log('populateDates');
+    //     let allWeeks = [];
+    //     let week = [];
+    //     let dateNumber = 1; // date counter
+    //     let weekNumber = 1; // first week
+    //     let lastFullDate = this.getLastFullDate();
+    //     let lastDate = lastFullDate.getDate();
+    //     let weekCount = this.getNumberOfWeeks();
+    //     let firstDay = this.getFirstDay();
+    //     let tdCount = weekCount * 7;
+    //     let dateCount = 0; //date counter
+    //     // create elements inside week. always will have 7 tds.
+    //     for (let i = 0; i <= tdCount; i++) {
+    //         let elem = React.createElement('td', {key: `td-${i}`},'')
+    //         if(i >= firstDay && i <= firstDay + lastDate - 1) {
+    //             elem = React.createElement('td', {key: `td-${i}`, onClick: this.getParentData},dateNumber)
+    //             dateNumber++;
+    //         }
+    //         week.push(elem)
+    //     }
+
+    //     for(let i = weekNumber; i <= weekCount; i++) {
+    //         let elem = React.createElement('tr', {id: `week-${i}`, 'data-weeknumber': i
+    //         // , ref: this[`week${i}ref`]
+    //     },
+    //         week[dateCount],
+    //         week[dateCount+1],
+    //         week[dateCount+2],
+    //         week[dateCount+3],
+    //         week[dateCount+4],
+    //         week[dateCount+5],
+    //         week[dateCount+6],
+    //         )
+    //         allWeeks.push(elem);
+    //         dateCount+=7;
+    //     }
+    //     return allWeeks;
+    // }
