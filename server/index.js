@@ -7,6 +7,7 @@ db.sequelize.authenticate()
     .catch(err => console.log(`Error: ${err}`))
 
 const app = express()
+app.use(express.json())
 app.use(meetingRouter)
 
 port = process.env.PORT || 5000
