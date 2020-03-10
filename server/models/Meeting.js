@@ -1,9 +1,10 @@
 'use strict'
 module.exports = (sequelize, DataTypes) => {
     const Meeting = sequelize.define('Meeting', {
-        name: DataTypes.STRING,
-        meetingNumber: DataTypes.INTEGER,
-        url: DataTypes.STRING
+        name: {
+            type: DataTypes.STRING,
+            defaultValue: 'Meeting',
+        },
     }, {})
     Meeting.associate = function (models) {
         //associations can be defined here
