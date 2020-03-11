@@ -1,0 +1,19 @@
+'use strict';
+const Meeting = require('./Meeting')
+
+module.exports = (sequelize, DataTypes) => {
+  const Participant = sequelize.define('Participant', {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    mark: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
+  }, {});
+  Participant.associate = function (models) {
+    // Participant.belongsTo(models.Meeting)
+  };
+  return Participant;
+};
