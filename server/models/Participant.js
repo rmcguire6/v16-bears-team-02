@@ -11,9 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }, {});
+  }, {})
   Participant.associate = function (models) {
-    // Participant.belongsTo(models.Meeting)
-  };
+    //associations can be defined here
+    Participant.belongsTo(models.Meeting)
+  }
   return Participant;
-};
+}
+
