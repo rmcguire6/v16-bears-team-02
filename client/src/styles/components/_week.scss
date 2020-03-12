@@ -1,0 +1,15 @@
+// .week-times:active {
+//     background-color: red;
+// }
+
+// .week-times:active:hover {
+//     background-color: red;
+// }
+
+.selected {
+    background-color: red;
+}
+
+#copy td:not(.week-times) {
+    user-select: none;
+}
