@@ -31,7 +31,25 @@ router.get('/participants/:id', (req, res) => {
             res.status(500).send()
         })
 })
-
+// Update a participant
+router.patch('/participants/:id', (req, res) => {
+    const id = parseInt(req.params.id)
+    return db.Participant.findByPk(id)
+        .then((participant) => {
+            if (!participant) {
+                return resStatus(404)
+            }
+            const { name, mark } = req.body
+            return participant.update({ name, mark })
+                .then(() => res.send(participant))
+                .catch((err) => {
+                    res.status(400).send(err)
+                })
+        })
+        .catch((err) => {
+            res.status(400).send(err)
+        })
+})
 // Delete a participant
 router.delete('/participants/:id', (req, res) => {
     const id = parseInt(req.params.id)
