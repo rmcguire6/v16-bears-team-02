@@ -15,17 +15,16 @@ router.get('/meetings', (req, res) => {
             return res.status(500).send({ error: 'something blew up the server' })
         })
 })
-
-// Create a meeting
+// Create a meeting 
 router.post('/meetings', (req, res) => {
-    const { name } = req.body
-    return db.Meeting.create({ name })
+    return db.Meeting.create({
+        name: req.body.meetingName
+    })
         .then((meeting) => res.status(201).send(meeting))
         .catch((err) => {
             res.status(400).send(err)
         })
 })
-
 // Get a meeting by id
 router.get('/meetings/:id', (req, res) => {
     const id = parseInt(req.params.id)
@@ -38,12 +37,13 @@ router.get('/meetings/:id', (req, res) => {
 // Update a meeting 
 router.patch('/meetings/:id', (req, res) => {
     const id = parseInt(req.params.id)
-    return db.Meeting.findByPk(id)
+    return db.Meeting
+        .findByPk(id)
         .then((meeting) => {
             if (!meeting) {
                 return resStatus(404)
             }
-            const { name } = req.body
+            const name = req.body.meetingName
             return meeting.update({ name })
                 .then(() => res.send(meeting))
                 .catch((err) => {
