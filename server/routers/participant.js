@@ -13,12 +13,13 @@ router.get('/participants', (req, res) => {
 })
 
 // Create a participant
-router.post('/participants', (req, res) => {
+router.post('/meetings/:id/participants', (req, res) => {
     const { name, mark } = req.body
-    return db.Participant.create({ name, mark })
+    const MeetingId = parseInt(req.params.id)
+    return db.Participant.create({ name, mark, MeetingId })
         .then((participant) => res.status(201).send(participant))
         .catch((err) => {
-            res.status(400).send(err)
+            res.sendStatus(400).send(err)
         })
 })
 
