@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "Meeting Planning App",
   "main": "index.js",
+  "engines": {
+    "node": "12.2.0",
+    "npm": "6.9.0"
+  },
   "dependencies": {
+    "concurrently": "^5.1.0",
     "express": "^4.17.1",
     "pg": "^7.18.2",
     "pg-hstore": "^2.3.3",
@@ -16,8 +21,9 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "nodemon index.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently --kill-others \" npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
