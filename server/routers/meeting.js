@@ -4,9 +4,10 @@ const db = require('../models')
 const Meeting = require('../models/Meeting')
 const Participant = require('../models/Participant')
 
-router.get('/', (req, res) => {
+router.get('/api', (req, res) => {
     res.send('backend up')
 })
+
 // Get all meetings
 router.get('/meetings', (req, res) => {
     return db.Meeting.findAll()
