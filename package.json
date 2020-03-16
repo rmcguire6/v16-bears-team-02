@@ -23,8 +23,7 @@
     "server": "node server/index.js",
     "server-auto-restart": "nodemon server/index.js",
     "client": "npm start --prefix server/client",
-    "start": "concurrently --kill-others-on-fail \" npm run server\" \"npm run client\"",
-    "heroku-postbuild": "npm run build --prefix server/client"
+    "start": "concurrently --kill-others-on-fail \" npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
